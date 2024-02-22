@@ -7,10 +7,10 @@ app.use(cors());
 app.use(bodyparser.json());
 
 const db=mysql.createConnection({
-    host:"brd5rohp616w73oh8mb3-mysql.services.clever-cloud.com",
-    user:"uy9zv2alcimdtouo",
-    password:"zCGGge3XtE3heDr9Srr0",
-    database:"brd5rohp616w73oh8mb3",
+    host:"localhost",
+    user:"root",
+    password:"Praba1488#",
+    database:"library_management",
 })
 db.connect((err)=>{
     if(err)
@@ -75,17 +75,24 @@ app.get("/allbooks",(req,res)=>{
         }
     })
 })
-app.post("/insertbook",(req,res)=>{
-    const insert='insert into libbooks (name ,author,price,description,category,subject,publishedDate) values(?,?,?,?,?,?,?)';
-    db.query(insert,(err,resu)=>{
-        if(err){
-            return res.status(500).json("error vanthuruchu")
+// Existing code...
+
+app.post("/insertbook", (req, res) => {
+    const { name, author, price, description, category, subject, publishedDate } = req.body;
+    const insertBookQuery = `INSERT INTO libbooks (name, author, price, description, category, subject, publishedDate) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    
+    db.query(insertBookQuery, [name, author, price, description, category, subject, publishedDate], (err, result) => {
+        if (err) {
+            console.log(`Error while inserting book: ${err}`);
+            return res.status(500).json({ error: "Failed to insert book" });
         }
-        else{
-            return res.status(200).json({"msg":"inserted bro"});
-        }
-    })
-})
+        
+        return res.status(200).json({ message: "Book inserted successfully" });
+    });
+});
+
+// Existing code...
+
 
 
 app.post("/register", (req, res) => {
@@ -117,6 +124,19 @@ app.post("/login", (req, res) => {
             return res.json({ error: "Invalid credentials" });
         }
         return res.status(200).json({ message: "Login successful", user: result[0] });
+    });
+});
+app.delete("/deletebook/:id", (req, res) => {
+    const bookId = req.params.id;
+    const deleteQuery = `DELETE FROM libbooks WHERE id = ?`;
+
+    db.query(deleteQuery, [bookId], (err, result) => {
+        if (err) {
+            console.log(`Error deleting book: ${err}`);
+            return res.status(500).json({ error: "Failed to delete book" });
+        }
+        
+        return res.status(200).json({ message: "Book deleted successfully" });
     });
 });
 
