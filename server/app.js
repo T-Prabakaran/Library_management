@@ -7,10 +7,10 @@ app.use(cors());
 app.use(bodyparser.json());
 
 const db=mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"Praba1488#",
-    database:"library_management",
+    host:"b76ni8sbrvmynxz76onr-mysql.services.clever-cloud.com",
+    user:"u7sbidg62hp8venh",
+    password:"zwfSbOmlXyYHNeDKgtAa",
+    database:"b76ni8sbrvmynxz76onr",
 })
 db.connect((err)=>{
     if(err)
